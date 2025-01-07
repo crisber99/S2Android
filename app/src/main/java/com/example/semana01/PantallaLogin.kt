@@ -2,16 +2,11 @@ package com.example.semana01
 
 
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -32,18 +27,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.semana01.modelo.Usuario
-import kotlin.math.sin
 
 
 @Preview(showBackground = true, name = "Prueba")
@@ -58,13 +48,14 @@ fun PantallaLogin() {
             if (showLoginForm.value) {
                 Text(text = "Iniciar Sesión")
                 UserForm(
-                    isCreateAccount = false
+                    isCreateAccount = false,
+                    LoginForm = showLoginForm
                 ) { email, pass ->
                     Log.d("Proy", "Logueado con: $email y $pass")
                 }
             } else {
                 Text(text = "Crea una cuenta")
-                UserForm(isCreateAccount = true)
+                UserForm(isCreateAccount = true, LoginForm = showLoginForm)
                 { email, pass ->
                     Log.d("Proy", "Cuenta creada con: $email y $pass")
                     val usuario = Usuario(email, pass)
@@ -72,35 +63,24 @@ fun PantallaLogin() {
                 }
             }
         }
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Spacer(modifier = Modifier.height(100.dp))
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                val text1 = if (showLoginForm.value) "¿No tienes cuenta?"
-                else "¿Ya tienes cuenta?"
-
-                val text2 = if (showLoginForm.value) "Regístrate"
-                else "Inicia Sesión"
-
-                Text(text = text1)
-                Text(text = text2,
-                    modifier = Modifier
-                        .clickable{showLoginForm.value = !showLoginForm.value}
-                        .padding(start = 5.dp),
-                    color = MaterialTheme.colors.secondaryVariant)
-            }
-        }
+//        Column(
+//            horizontalAlignment = Alignment.CenterHorizontally,
+//            verticalArrangement = Arrangement.Center
+//        ) {
+//            Spacer(modifier = Modifier.height(100.dp))
+//            Row(
+//                horizontalArrangement = Arrangement.Center,
+//                verticalAlignment = Alignment.CenterVertically
+//            ){
+//
+//            }
+//        }
     }
 }
 
 
 @Composable
-fun UserForm(isCreateAccount: Boolean = false, onDone: (String, String) -> Unit = {email, pass ->}) {
+fun UserForm(isCreateAccount: Boolean = false, LoginForm: MutableState<Boolean>, onDone: (String, String) -> Unit = { email, pass ->}) {
     val email = rememberSaveable() { mutableStateOf("") }
     val pass = rememberSaveable() { mutableStateOf("") }
     val passVisible = rememberSaveable() { mutableStateOf(false) }
@@ -117,6 +97,10 @@ fun UserForm(isCreateAccount: Boolean = false, onDone: (String, String) -> Unit 
             labelID = "Password",
             passVisible = passVisible
         )
+        TextoBajo(
+            showLoginForm = LoginForm
+
+        )
         SubmitButton(
             textId = if(isCreateAccount) "Crear Cuenta" else "Login",
             inputValido = valido
@@ -125,6 +109,22 @@ fun UserForm(isCreateAccount: Boolean = false, onDone: (String, String) -> Unit 
             keyboardController?.hide()
         }
     }
+}
+
+@Composable
+fun TextoBajo(showLoginForm: MutableState<Boolean>) {
+    val text1 = if (showLoginForm.value) "¿No tienes cuenta?"
+    else "¿Ya tienes cuenta?"
+
+    val text2 = if (showLoginForm.value) "Regístrate"
+    else "Inicia Sesión"
+
+    Text(text = text1)
+    Text(text = text2,
+        modifier = Modifier
+            .clickable { showLoginForm.value = !showLoginForm.value }
+            .padding(start = 5.dp),
+        color = MaterialTheme.colors.secondaryVariant)
 }
 
 @Composable

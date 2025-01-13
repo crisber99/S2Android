@@ -2,14 +2,17 @@ package com.example.semana01
 
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -27,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -40,44 +44,32 @@ import com.example.semana01.modelo.Usuario
 @Composable
 fun PantallaLogin() {
     val showLoginForm = rememberSaveable { mutableStateOf(true) }
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            if (showLoginForm.value) {
-                Text(text = "Iniciar Sesión")
-                UserForm(
-                    isCreateAccount = false,
-                    LoginForm = showLoginForm
-                ) { email, pass ->
-                    Log.d("Proy", "Logueado con: $email y $pass")
-                }
-            } else {
-                Text(text = "Crea una cuenta")
-                UserForm(isCreateAccount = true, LoginForm = showLoginForm)
-                { email, pass ->
-                    Log.d("Proy", "Cuenta creada con: $email y $pass")
-                    val usuario = Usuario(email, pass)
-                    Usuario.agregarUsuario(usuario)
+    Surface(modifier = Modifier
+        .fillMaxSize()) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                if (showLoginForm.value) {
+                    Text(text = "Iniciar Sesión")
+                    UserForm(
+                        isCreateAccount = false,
+                        LoginForm = showLoginForm
+                    ) { email, pass ->
+                        Log.d("Proy", "Logueado con: $email y $pass")
+                    }
+                } else {
+                    Text(text = "Crea una cuenta")
+                    UserForm(isCreateAccount = true, LoginForm = showLoginForm)
+                    { email, pass ->
+                        Log.d("Proy", "Cuenta creada con: $email y $pass")
+                        val usuario = Usuario(email, pass)
+                        Usuario.agregarUsuario(usuario)
+                    }
                 }
             }
         }
-//        Column(
-//            horizontalAlignment = Alignment.CenterHorizontally,
-//            verticalArrangement = Arrangement.Center
-//        ) {
-//            Spacer(modifier = Modifier.height(100.dp))
-//            Row(
-//                horizontalArrangement = Arrangement.Center,
-//                verticalAlignment = Alignment.CenterVertically
-//            ){
-//
-//            }
-//        }
     }
-}
-
 
 @Composable
 fun UserForm(isCreateAccount: Boolean = false, LoginForm: MutableState<Boolean>, onDone: (String, String) -> Unit = { email, pass ->}) {
@@ -88,6 +80,7 @@ fun UserForm(isCreateAccount: Boolean = false, LoginForm: MutableState<Boolean>,
         email.value.trim().isNotEmpty() && pass.value.trim().isNotEmpty()
     }
     val keyboardController = LocalSoftwareKeyboardController.current
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         EmailInput(
             emailState = email

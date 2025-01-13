@@ -31,7 +31,7 @@ import com.example.semana01.modelo.Usuario
 fun PantallaUsuarios() {
     Box(
         modifier = Modifier.fillMaxSize()
-            .background(color = Color.White)
+            .background(color = Color(0xffa1e2fa))
     ) {
         Column(
             modifier = Modifier

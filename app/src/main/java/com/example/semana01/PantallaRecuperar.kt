@@ -45,8 +45,10 @@ fun PantallaRecuperar() {
                 ){
                     email ->
                     Log.d("Proy", "Mail ingresado a buscar: $email")
-                    val UsuarioEncontrado = Usuario.obtUsuarioMail(email)
-                    if(UsuarioEncontrado != null){
+                    val usuario = Usuario.obtUsuarioMail(email)
+Log.d("Proy", usuario.toString())
+
+                    if(usuario != null){
                         Log.d("Proy", "Usuario encontrado")
                     }
                     else

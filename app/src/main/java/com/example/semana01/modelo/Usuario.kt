@@ -1,5 +1,7 @@
 package com.example.semana01.modelo
 
+import android.util.Log
+
 data class Usuario(val email: String, val pass: String) {
     companion object{
         private val listaUsuario = mutableListOf<Usuario>()

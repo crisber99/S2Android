@@ -19,6 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +29,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.semana01.modelo.Usuario
+import com.example.semana01.modelo.Usuario.Companion.agregarUsuario
 import com.example.semana01.ui.theme.Semana01Theme
 
 
@@ -39,7 +42,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Semana01Theme {
                 val navigatonController = rememberNavController()
-
+                cincoUsuarios()
                 Scaffold (
                     bottomBar = { MenuBottomNavigation(navController = navigatonController)}
                 ){
@@ -57,7 +60,8 @@ class MainActivity : ComponentActivity() {
     val pantallas = listOf(
         Routes.PantallaLogin,
         Routes.PantallaUsuarios,
-        Routes.PantallaRecuperar
+        Routes.PantallaRecuperar,
+        Routes.PantallaRecetas
     )
 
     BottomNavigation {
@@ -94,6 +98,7 @@ fun NavigationGraph(navController: NavHostController) {
             composable(Routes.PantallaLogin.ruta) { PantallaLogin() }
             composable(Routes.PantallaUsuarios.ruta) { PantallaUsuarios() }
             composable(Routes.PantallaRecuperar.ruta) { PantallaRecuperar() }
+            composable(Routes.PantallaRecetas.ruta) { PantallaRecetas() }
         }
     }
 }
@@ -104,6 +109,20 @@ fun PreView(){
     val navigatonController = rememberNavController()
     MenuBottomNavigation(navController = navigatonController)
     //NavigationGraph(navController = navigatonController)
+
+}
+
+fun cincoUsuarios() {
+    var usuario = Usuario("mail@mail.com", "prueba")
+    for (i in 1..5) {
+        usuario = Usuario("mail$i@mail.com", "prueba $i")
+        Log.d("usuario", "N°$i")
+    }
+
+
+
+    agregarUsuario(usuario)
+
 }
 
 fun seguridadNula() {
